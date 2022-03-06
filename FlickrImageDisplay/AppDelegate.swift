@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  FlickrImageDisplay
-//
-//  Created by Admin on 02/03/2022.
-//
-
 import UIKit
 import CoreData
 

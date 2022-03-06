@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  FlickrImageDisplay
-//
-//  Created by Admin on 02/03/2022.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
