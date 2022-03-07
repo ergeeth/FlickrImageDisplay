@@ -7,7 +7,7 @@ class ImageUtility: NSObject {
     }
     
     @objc func saveFileComplete(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        print("Save finished!")
+        print("Save File Completed!")
     }
 }
 
