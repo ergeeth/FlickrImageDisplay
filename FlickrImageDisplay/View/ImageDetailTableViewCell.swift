@@ -4,13 +4,13 @@ import Kingfisher
 
 class ImageDetailTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var flickImage: UIImageView!
-    @IBOutlet weak var imgDesc: UILabel!
+    @IBOutlet weak var displayImage: UIImageView!
+    @IBOutlet weak var displayImageDesc: UILabel!
     
     func setData(_ imageDetail: ImageDetail) {
-        imgDesc.text = imageDetail.title
+        displayImageDesc.text = imageDetail.title
         let url = URL(string: imageDetail.url)
-        flickImage.kf.setImage(with:url)
+        displayImage.kf.setImage(with:url)
     }
 
 }

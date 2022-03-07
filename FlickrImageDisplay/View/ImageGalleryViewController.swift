@@ -14,10 +14,10 @@ class ImageGalleryViewController: UIViewController {
         super.viewDidLoad()
         
         bindViewModelState()
-        bindSearchTextFieldToViewModel()
+        bindSearchBarTextFieldToViewModel()
     }
     
-    private func bindSearchTextFieldToViewModel() {
+    private func bindSearchBarTextFieldToViewModel() {
         searchBarText.textPublisher
              .debounce(for: 0.5, scheduler: RunLoop.main)
              .removeDuplicates()
@@ -61,7 +61,7 @@ extension ImageGalleryViewController : UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let tablecell = tableView.dequeueReusableCell(withIdentifier: "imageCell") as? ImageDetailTableViewCell else { return UITableViewCell() }
+        guard let tablecell = tableView.dequeueReusableCell(withIdentifier: "imageViewCell") as? ImageDetailTableViewCell else { return UITableViewCell() }
         
         tablecell.setData(viewModel.imageDetails[indexPath.row])
 
@@ -84,7 +84,7 @@ extension ImageGalleryViewController : UITableViewDelegate, UITableViewDataSourc
         }
         
         
-        saveAction.backgroundColor = UIColor(red: 255/255.0, green: 128.0/255.0, blue: 0.0, alpha: 1.0)
+        saveAction.backgroundColor = UIColor(red: 215/255.0, green: 130.0/255.0, blue: 1.0, alpha: 1.0)
         let shareAction = UIContextualAction(style: .normal, title: "Share") {
             (action, sourceView, completionHandler) in
             self.swipeShareAction(indexpath: indexPath)
@@ -104,13 +104,13 @@ extension ImageGalleryViewController {
     func swipeSaveAction( _ imageData : ImageDetail, indexpath : IndexPath) {
         let cell = tableView.cellForRow(at: indexpath) as? ImageDetailTableViewCell
         
-        guard let inputImage = cell?.flickImage.image else { return }
-        ImageUtility.writeToPhotoAlbum(image: inputImage)
+        guard let inputImage = cell?.displayImage.image else { return }
+        ImageUtility.saveFile(image: inputImage)
     }
     
     func swipeShareAction(indexpath : IndexPath) {
         let cell = tableView.cellForRow(at: indexpath) as? ImageDetailTableViewCell
-        guard let inputImage = cell?.flickImage.image else { return }
+        guard let inputImage = cell?.displayImage.image else { return }
         let items = [inputImage]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         present(ac, animated: true)
