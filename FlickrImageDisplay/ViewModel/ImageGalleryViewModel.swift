@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 protocol ImageGalleryViewModelType {
     var stateBinding: Published<ViewState>.Publisher { get }
@@ -12,8 +11,7 @@ final class ImageGalleryViewModel: ImageGalleryViewModelType {
     
     var stateBinding: Published<ViewState>.Publisher{ $state }
     
-    private let networkManager:Networkable
-    private var cancellables:Set<AnyCancellable> = Set()
+    private let apiServiceManager:ApiServicable
     
     @Published  var state: ViewState = .none
     
@@ -23,36 +21,28 @@ final class ImageGalleryViewModel: ImageGalleryViewModelType {
         return imageDetails.count
     }
     
-    init(networkManager:Networkable) {
-        self.networkManager = networkManager
+    init(apiServiceManager:ApiServicable) {
+        self.apiServiceManager = apiServiceManager
     }
     
     func search(request: Request) {
         
-        state = ViewState.loading
-        let publisher = networkManager.doApiCall(apiRequest: request)
-        
-        let cancelable = publisher.sink { [weak self ]completion in
-            switch completion {
-            case .finished:
-                break
+        apiServiceManager.get(request: request, type: FlickrResponse.self ) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let responce):
+               
+                self?.imageDetails = responce.photos.photo.map {
+                    ImageDetail( title: $0.title, url: "\(EndPoints.imagesBaseUrl)/\($0.server)/\($0.id)_\($0.secret)_w.jpg")
+                }
+                
+                self?.state = ViewState.finishedLoading
+                
             case .failure(_):
                 self?.imageDetails = []
                 self?.state = ViewState.error("Network Not Availale")
             }
-        } receiveValue: { [weak self] images in
-            self?.imageDetails = images
-            self?.state = ViewState.finishedLoading
-        }
-        self.cancellables.insert(cancelable)
-    }
-    
-    
-    deinit {
-        cancellables.forEach { cancellable in
-            cancellable.cancel()
         }
     }
-    
-    
 }

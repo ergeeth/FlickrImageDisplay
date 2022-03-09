@@ -8,7 +8,7 @@ class ImageGalleryViewController: UIViewController {
     
     private var bindings = Set<AnyCancellable>()
     
-    let viewModel:ImageGalleryViewModel = ImageGalleryViewModel(networkManager: Networking())
+    let viewModel:ImageGalleryViewModel = ImageGalleryViewModel(apiServiceManager: ApiServiceManager())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +22,7 @@ class ImageGalleryViewController: UIViewController {
              .debounce(for: 0.5, scheduler: RunLoop.main)
              .removeDuplicates()
              .sink { [weak self] in
-                 let request = Request(baseUrl: APIEndPoints.baseUrl, path:"", params: ["method":APIEndPoints.photoMethod, "text":$0, "api_key": APIEndPoints.apiKey, "format" : "json", "nojsoncallback" : "1"])
+                 let request = Request(baseUrl: EndPoints.baseUrl, path:"", params: ["method":EndPoints.photoMethod, "text":$0, "api_key": EndPoints.apiKey, "format" : "json", "nojsoncallback" : "1"])
 
                  self?.viewModel.search(request:request)
              }
@@ -47,7 +47,7 @@ class ImageGalleryViewController: UIViewController {
         case .finishedLoading:
             tableView.isHidden = false
             tableView.reloadData()
-        case .error(let error):
+        case .error(_):
             tableView.reloadData()
         }
     }

@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-import Kingfisher
 
 class ImageDetailTableViewCell: UITableViewCell {
     
@@ -9,8 +8,7 @@ class ImageDetailTableViewCell: UITableViewCell {
     
     func setData(_ imageDetail: ImageDetail) {
         displayImageDesc.text = imageDetail.title
-        let url = URL(string: imageDetail.url)
-        displayImage.kf.setImage(with:url)
+        displayImage.loadImageFromUrl(urlString: imageDetail.url)
     }
 
 }

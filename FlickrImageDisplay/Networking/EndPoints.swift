@@ -1,6 +1,6 @@
 import Foundation
 
-struct APIEndPoints {
+struct EndPoints {
     static let baseUrl = "https://www.flickr.com/services/rest/"
     static let photoMethod = "flickr.photos.search"
     static let imagesBaseUrl = "https://live.staticflickr.com/"
